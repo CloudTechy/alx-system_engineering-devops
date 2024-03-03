@@ -3,8 +3,7 @@
 
 # Check if an argument is provided
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 <network>"
-    echo "Example: $0 192.168.1.0/24"
+    echo "Usage: $0 {IP_ADDRESS}"
     exit 1
 fi
 
