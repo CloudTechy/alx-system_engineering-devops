@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Check if user has sudo privileges
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root or with sudo"
+  exit
+fi
+
+# Display column headers
+echo "PID   Program Name      Listening Port"
+
+# Using netstat to get listening ports and PIDs
+netstat -tuln | awk '{print $4, $7}' | grep -E 'LISTEN' | while read -r line; do
+    # Extract PID from the line
+    pid=$(echo "$line" | awk '{print $2}' | cut -d'/' -f1)
+
+    # Use lsof to get the program name based on the PID
+    program=$(lsof -p "$pid" 2>/dev/null | grep -E 'COMMAND' | awk '{print $1}' | tail -n 1)
+
+    # Extract listening port from the line
+    port=$(echo "$line" | awk '{print $1}' | cut -d':' -f2)
+
+    # Display PID, Program Name, and Listening Port
+    echo "$pid    $program       $port"
+done
+
