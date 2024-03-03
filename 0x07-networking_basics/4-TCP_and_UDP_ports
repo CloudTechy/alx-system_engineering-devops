@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Check if user has sudo privileges
 if [ "$EUID" -ne 0 ]; then
