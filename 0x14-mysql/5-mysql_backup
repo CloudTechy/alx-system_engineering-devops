@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+passwd=$1
+
+if [ $# -eq 0 ]; then
+	echo "Usage: $0 <password>"
+	exit 1
+fi
+
+if [ $(id -u) != 0 ]; then
+        echo "you are not root"
+        exit 1
+fi
+
+mysqldump -u root -p"$passwd" --all-databases > backup.sql
+
+tar czf "$(date +%d-%m-%Y).tar.gz" backup.sql
+
+echo "backup.sql"
